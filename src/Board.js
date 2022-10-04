@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -78,13 +78,60 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+
+    // I - input is the specific index of the row we are targeting
+    // O - output is a boolean value of whether there is a conflict or not
+    // C -
+    // E -
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      // return false; // fixme
+
+      // create conflict variable and set to 0
+      var conflict = 0;
+      // iterate over the array located at the given index
+      for (var i = 0; i < this.attributes[rowIndex].length; i++) {
+        // current element variable
+        var currElement = this.attributes[rowIndex][i];
+        // if the current element is 1
+        if (currElement === 1) {
+          // increment conflict variable by 1;
+          conflict += 1;
+        }
+      }
+      // if conflict variable is greater than or equal to 2
+      if (conflict >= 2) {
+        // then return true;
+        return true;
+      } else {
+        // else return false;
+        return false;
+      }
     },
+
+    // BOARD VISUAL IN ARRAY FORMAT
+    // [
+    //   [0, 0, 0, 0] i = 0
+    //   [0, 0, 0, 0] i = 1
+    //   [0, 0, 0, 0] i = 2
+    //   [0, 0, 0, 0] i = 3
+    // ]
+    //
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      // return false; // fixme
+      console.log(this);
+      // iterate through indexes 0 - 3, to represent row indexes
+      for (var i = 0; i < 4; i++) {
+      // invoke hasRowConflictAt() on index
+      // if the invocation returns true
+        if (this.hasRowConflictAt(i)) {
+          // return true
+          return true;
+        }
+      }
+      // else return false
+      return false;
     },
 
 
