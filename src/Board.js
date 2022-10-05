@@ -95,7 +95,7 @@
         // if the current element is 1
         if (currElement === 1) {
           // increment conflict variable by 1;
-          conflict += 1;
+          conflict++;
         }
       }
       // if conflict variable is greater than or equal to 2
@@ -120,7 +120,7 @@
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       // return false; // fixme
-      console.log(this);
+
       // iterate through indexes 0 - 3, to represent row indexes
       for (var i = 0; i < 4; i++) {
       // invoke hasRowConflictAt() on index
@@ -141,13 +141,56 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      // return false; // fixme
+
+      //create conflict variable that will be incremented
+      var conflict = 0;
+      //iterate through the parent array (parent array is array holding all rows)
+      for (var key in this.attributes) {
+        //create variable for current row
+        var currentRow = this.attributes[key];
+        //if current row at column index is equal to 1
+        if (currentRow[colIndex] === 1) {
+          //increment conflict variable
+          conflict++;
+        }
+      }
+      //if conflict var is greater than or equal to 2
+      if (conflict >= 2) {
+        //return true
+        return true;
+      }
+      //else return false
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      // return false; // fixme
+
+      //iterate through indexes 0-3
+      for (var i = 0; i < 4; i++) {
+        //invoke hasColConflictAt fn on the current index
+        if (this.hasColConflictAt(i)) {
+        //if the above returns true
+        //return true
+          return true;
+        }
+      }
+      //return false
+      return false;
     },
+
+    // BOARD VISUAL IN ARRAY FORMAT
+    // * Note: this.attributes is an object not an array *
+    // [
+    // * values in array are representative of column index not actual values *
+    //   [0, 1, 2, 3] i = 0
+    //   [0, 1, 2, 3] i = 1
+    //   [0, 1, 2, 3] i = 2
+    //   [0, 1, 2, 3] i = 3
+    // ]
+    //
 
 
 
@@ -155,14 +198,121 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow, row) {
+      // return false;
+      // create conflict variable set to 0
+      var conflict = 0;
+      // create index variable set to input value
+      var index = majorDiagonalColumnIndexAtFirstRow;
+      // iterate through the parent object
+      for (var key in this.attributes) {
+        // if there is a piece at currentRow at the index variable
+        var currentRow = this.attributes[key];
+        if (currentRow[index] === 1) {
+          // increment conflict by 1
+          conflict++;
+        }
+        // increment index by 1
+        index++;
+      }
+      // if conflict variable greater than or equal to 2
+      if (conflict >= 2) {
+      // then return true
+        return true;
+      }
+      // return false
+      return false;
     },
+
+    // * note: possible edge case of loop hitting undefined
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      //call hasMajorDiagonalConflictAt on the board object
+      //if above returns true
+      if (this.prototype.hasMajorDiagonalConflictAt(0)) {
+        //return true
+        return true;
+      }
+      //create an empty object
+      var objCopy1 = {};
+      //copy over rows 1-3 from attributes
+      objCopy1[1] = this.attributes[1];
+      objCopy1[2] = this.attributes[2];
+      objCopy1[3] = this.attributes[3];
+      //copy over hasDiagonalConflictAt method
+      objCopy1.prototype = this.prototype;
+      //call method on new object
+      //if above returns true
+      if (objCopy1.prototype.hasMajorDiagonalConflictAt(0)) {
+        //return true
+        return true;
+      }
+
+      //create 2nd empty obj
+      var objCopy2 = {};
+      //copy over rows 2-3 from attributes
+      objCopy2[2] = this.attributes[2];
+      objCopy2[3] = this.attributes[3];
+      //copy over hasDiagonalConflictAt method
+      objCopy2.prototype = this.prototype;
+      //call method on new object
+      //if above returns true
+      if (objCopy2.prototype.hasMajorDiagonalConflictAt(0)) {
+        //return true
+        return true;
+      }
+      //return false
+      return false;
+
     },
+
+    // * what we tried for above *
+    // create a copy of this.attributes by creating an empty object and using underscore fn extend to add properties of original board
+    //   var boardObjCopy = {};
+    //   // var boardObjCopy = Object.create(this);
+    //   // _.extend(boardObjCopy, this);
+    //   for (var key in this) {
+    //     boardObjCopy[key] = this[key];
+    //   }
+    //   // console.log(boardObjCopy.attributes);
+    //   //iterate through the copy object
+    //   for (var key in boardObjCopy.attributes) {
+    //     //create a var for current row
+    //     var currentRow = boardObjCopy.attributes[key];
+    //     //iterate through the current row
+    //     for (var i = 0; i < currentRow.length - 1; i++) {
+    //       //invoke copyObject.hasConflictsAt function on current index
+    //       if (boardObjCopy.hasMajorDiagonalConflictAt(i)) {
+    //         //if above returns true
+    //         //return true
+    //         return true;
+    //       }
+    //       //if we hit the end of the current iteration and the invocation doesnt equal true
+    //       if (i === currentRow.length - 2 && !boardObjCopy.hasMajorDiagonalConflictAt(i)) {
+    //         // get object of all keys
+    //         var keysArr = Object.keys(boardObjCopy.attributes);
+    //         //delete first row from copy
+    //         console.log('before delete:', this.attributes);
+    //         // delete boardObjCopy.attributes[keysArr[0]];
+    //         console.log('after delete:', this.attributes);
+    //       }
+    //     }
+    //   }
+    //   //return false
+    //   return false;
+    // },
+
+    // BOARD VISUAL IN ARRAY FORMAT
+    // * Note: this.attributes is an object not an array *
+    // [
+    // * values in array are representative of column index not actual values *
+    //   [0, 1, 2, 3] i = 0
+    //   [0, 1, 2, 3] i = 1
+    //   [0, 1, 2, 3] i = 2
+    //   [0, 1, 2, 3] i = 3
+    // ]
+    //
 
 
 
