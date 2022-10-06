@@ -198,16 +198,26 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
-    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow, row) {
+    hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow, start) {
       // return false;
       // create conflict variable set to 0
+      var startIteration = start;
       var conflict = 0;
       // create index variable set to input value
       var index = majorDiagonalColumnIndexAtFirstRow;
-      // iterate through the parent object
+      //create rows array variable
+      var rowsArr = [];
+      //iterate through attributes object
       for (var key in this.attributes) {
+        //push each property to our rows array
+        rowsArr.push(this.attributes[key]);
+      }
+      // [ [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0] ]
+
+      // iterate through the rows array
+      for (var i = start; i < rowsArr.length - 1; i++) {
         // if there is a piece at currentRow at the index variable
-        var currentRow = this.attributes[key];
+        var currentRow = rowsArr[i];
         if (currentRow[index] === 1) {
           // increment conflict by 1
           conflict++;
@@ -228,105 +238,93 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      //call hasMajorDiagonalConflictAt on the board object
-      //if above returns true
-      if (this.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
-      }
-      //create an empty object
-      var objCopy1 = {};
-      //copy over rows 1-3 from attributes
-      objCopy1[1] = this.attributes[1];
-      objCopy1[2] = this.attributes[2];
-      objCopy1[3] = this.attributes[3];
-      //copy over hasDiagonalConflictAt method
-      objCopy1.prototype = this.prototype;
-      //call method on new object
-      //if above returns true
-      if (objCopy1.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
+
+      //create variable for rows arr
+      var rowsArr = [];
+      //iterate through this.attributes
+      for (var key in this.attributes) {
+      //push each property into rows array
+        rowsArr.push(this.attributes[key]);
       }
 
-      //create 2nd empty obj
-      var objCopy2 = {};
-      //copy over rows 2-3 from attributes
-      objCopy2[2] = this.attributes[2];
-      objCopy2[3] = this.attributes[3];
-      //copy over hasDiagonalConflictAt method
-      objCopy2.prototype = this.prototype;
-      //call method on new object
-      //if above returns true
-      if (objCopy2.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
+      //iterate through our rows array
+      for (var i = 0; i < rowsArr.length - 1; i++) {
+        //create a var for the current row
+        var currentRow = rowsArr[i];
+        //call hasMajorDiagonalConflictsAt on current index
+        if (this.hasMajorDiagonalConflictAt(0, i)) {
+          //if above returns true
+          //return true
+          return true;
+        }
       }
-      //return false
       return false;
-
+      //return false
     },
-
-    // * what we tried for above *
-    // create a copy of this.attributes by creating an empty object and using underscore fn extend to add properties of original board
-    //   var boardObjCopy = {};
-    //   // var boardObjCopy = Object.create(this);
-    //   // _.extend(boardObjCopy, this);
-    //   for (var key in this) {
-    //     boardObjCopy[key] = this[key];
-    //   }
-    //   // console.log(boardObjCopy.attributes);
-    //   //iterate through the copy object
-    //   for (var key in boardObjCopy.attributes) {
-    //     //create a var for current row
-    //     var currentRow = boardObjCopy.attributes[key];
-    //     //iterate through the current row
-    //     for (var i = 0; i < currentRow.length - 1; i++) {
-    //       //invoke copyObject.hasConflictsAt function on current index
-    //       if (boardObjCopy.hasMajorDiagonalConflictAt(i)) {
-    //         //if above returns true
-    //         //return true
-    //         return true;
-    //       }
-    //       //if we hit the end of the current iteration and the invocation doesnt equal true
-    //       if (i === currentRow.length - 2 && !boardObjCopy.hasMajorDiagonalConflictAt(i)) {
-    //         // get object of all keys
-    //         var keysArr = Object.keys(boardObjCopy.attributes);
-    //         //delete first row from copy
-    //         console.log('before delete:', this.attributes);
-    //         // delete boardObjCopy.attributes[keysArr[0]];
-    //         console.log('after delete:', this.attributes);
-    //       }
-    //     }
-    //   }
-    //   //return false
-    //   return false;
-    // },
-
-    // BOARD VISUAL IN ARRAY FORMAT
-    // * Note: this.attributes is an object not an array *
-    // [
-    // * values in array are representative of column index not actual values *
-    //   [0, 1, 2, 3] i = 0
-    //   [0, 1, 2, 3] i = 1
-    //   [0, 1, 2, 3] i = 2
-    //   [0, 1, 2, 3] i = 3
-    // ]
-    //
-
-
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow, start) {
+      // return false;
+      // create conflict variable set to 0
+      var startIteration = start;
+      var conflict = 0;
+      // create index variable set to input value
+      var index = minorDiagonalColumnIndexAtFirstRow;
+      //create rows array variable
+      var rowsArr = [];
+      //iterate through attributes object
+      for (var key in this.attributes) {
+        //push each property to our rows array
+        rowsArr.push(this.attributes[key]);
+      }
+      // [ [0,0,0,0], [0,0,0,0], [0,0,0,0],
+      //   [0,0,0,0]
+
+      // iterate through the rows array
+      for (var i = start; i < rowsArr.length - 1; i++) {
+        // if there is a piece at currentRow at the index variable
+        var currentRow = rowsArr[i];
+        if (currentRow[index] === 1) {
+          // increment conflict by 1asdfasfdasf
+          conflict++;
+        }
+        // decrement index by 1
+        index--;
+      }
+      // if conflict variable greater than or equal to 2
+      if (conflict >= 2) {
+      // then return true
+        return true;
+      }
+      // return false
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      //create variable for rows arr
+      var rowsArr = [];
+      //iterate through this.attributes
+      for (var key in this.attributes) {
+      //push each property into rows array
+        rowsArr.push(this.attributes[key]);
+      }
+      //iterate through our rows array
+      for (var i = 0; i < rowsArr.length - 1; i++) {
+        //create a var for the current row
+        var currentRow = rowsArr[i];
+        //call hasMajorDiagonalConflictsAt on current index
+        if (this.hasMinorDiagonalConflictAt(3, i)) {
+          //if above returns true
+          //return true
+          return true;
+        }
+      }
+      return false;
+      //return false
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
