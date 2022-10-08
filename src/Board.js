@@ -228,43 +228,33 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      //call hasMajorDiagonalConflictAt on the board object
-      //if above returns true
-      if (this.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
-      }
-      //create an empty object
-      var objCopy1 = {};
-      //copy over rows 1-3 from attributes
-      objCopy1[1] = this.attributes[1];
-      objCopy1[2] = this.attributes[2];
-      objCopy1[3] = this.attributes[3];
-      //copy over hasDiagonalConflictAt method
-      objCopy1.prototype = this.prototype;
-      //call method on new object
-      //if above returns true
-      if (objCopy1.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
-      }
-
-      //create 2nd empty obj
-      var objCopy2 = {};
-      //copy over rows 2-3 from attributes
-      objCopy2[2] = this.attributes[2];
-      objCopy2[3] = this.attributes[3];
-      //copy over hasDiagonalConflictAt method
-      objCopy2.prototype = this.prototype;
-      //call method on new object
-      //if above returns true
-      if (objCopy2.prototype.hasMajorDiagonalConflictAt(0)) {
-        //return true
-        return true;
+      var boardObjCopy = {};
+      Object.assign(boardObjCopy, this);
+      // console.log(boardObjCopy.attributes);
+      //iterate through the copy object
+      for (var key in boardObjCopy.attributes) {
+        //create a var for current row
+        var currentRow = boardObjCopy.attributes[key];
+        //iterate through the current row
+        for (var i = 0; i < currentRow.length - 1; i++) {
+          //invoke copyObject.hasConflictsAt function on current index
+          if (boardObjCopy.hasMajorDiagonalConflictAt(i)) {
+            //if above returns true
+            //return true
+            return true;
+          }
+          //if we hit the end of the current iteration and the invocation doesnt equal true
+          if (i === currentRow.length - 2 && !boardObjCopy.hasMajorDiagonalConflictAt(i)) {
+            // get object of all keys
+            var keysArr = Object.keys(this.attributes);
+            //delete first row from copy
+            delete boardObjCopy[keysArr];
+            // delete boardObjCopy.attributes[keysArr[0]];
+          }
+        }
       }
       //return false
       return false;
-
     },
 
     // * what we tried for above *
