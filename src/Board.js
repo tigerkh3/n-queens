@@ -121,8 +121,10 @@
     hasAnyRowConflicts: function() {
       // return false; // fixme
 
-      // iterate through indexes 0 - 3, to represent row indexes
-      for (var i = 0; i < 4; i++) {
+      // create an array of all the this.attribute keys minus 1
+      var totalRows = Object.keys(this.attributes);
+      // iterate through
+      for (var i = 0; i < totalRows.length - 1; i++) {
       // invoke hasRowConflictAt() on index
       // if the invocation returns true
         if (this.hasRowConflictAt(i)) {
@@ -161,6 +163,7 @@
         return true;
       }
       //else return false
+
       return false;
     },
 
@@ -168,8 +171,9 @@
     hasAnyColConflicts: function() {
       // return false; // fixme
 
-      //iterate through indexes 0-3
-      for (var i = 0; i < 4; i++) {
+      // create variable totalColumns
+      var totalColumns = Object.keys(this.attributes);
+      for (var i = 0; i < totalColumns.length - 1; i++) {
         //invoke hasColConflictAt fn on the current index
         if (this.hasColConflictAt(i)) {
         //if the above returns true
